@@ -1,0 +1,502 @@
+autoencoder:
+  model:
+    checkpoints_prefix: autoencoder-num_latents=16--wikipedia-test
+    text_encoder: bert-base-cased
+    text_encoder_freeze_params: true
+    num_workers: 30
+    load_checkpoint: null
+  latent:
+    dim: 768
+    num_latents: 16
+    is_detach_previous_latents: true
+  hidden:
+    size: 768
+  attention:
+    head_size: 64
+    num_heads: 12
+  loss:
+    level_weights:
+    - 1.0
+    - 1.0
+    - 1.0
+    - 1.0
+    - 1.0
+    - 1.0
+  training:
+    training_iters: 20000
+    batch_size: 256
+    batch_size_per_gpu: 256
+  params:
+    text_encoder: 0
+    encoder: 99287040
+    decoder: 76678682
+    total: 175965722
+  all_params:
+    text_encoder: {}
+    encoder:
+      latents: 12288
+      positional_emb.emb.weight: 98304
+      latent_norm.gamma: 768
+      latent_layers.0.latent_attn.norm_embeddings.gamma: 768
+      latent_layers.0.latent_attn.norm_latents.gamma: 768
+      latent_layers.0.latent_attn.embeddings_to_KV.weight: 1179648
+      latent_layers.0.latent_attn.latents_to_Q.weight: 589824
+      latent_layers.0.latent_attn.latents_to_KV.weight: 1179648
+      latent_layers.0.latent_attn.query_norm.gamma: 64
+      latent_layers.0.latent_attn.key_norm.gamma: 64
+      latent_layers.0.latent_attn.projector_latents.weight: 589824
+      latent_layers.0.ffn_latent.ffd.0.weight: 768
+      latent_layers.0.ffn_latent.ffd.0.bias: 768
+      latent_layers.0.ffn_latent.ffd.1.weight: 2359296
+      latent_layers.0.ffn_latent.ffd.1.bias: 3072
+      latent_layers.0.ffn_latent.ffd.4.weight: 2359296
+      latent_layers.0.ffn_latent.ffd.4.bias: 768
+      latent_layers.1.latent_attn.norm_embeddings.gamma: 768
+      latent_layers.1.latent_attn.norm_latents.gamma: 768
+      latent_layers.1.latent_attn.embeddings_to_KV.weight: 1179648
+      latent_layers.1.latent_attn.latents_to_Q.weight: 589824
+      latent_layers.1.latent_attn.latents_to_KV.weight: 1179648
+      latent_layers.1.latent_attn.query_norm.gamma: 64
+      latent_layers.1.latent_attn.key_norm.gamma: 64
+      latent_layers.1.latent_attn.projector_latents.weight: 589824
+      latent_layers.1.ffn_latent.ffd.0.weight: 768
+      latent_layers.1.ffn_latent.ffd.0.bias: 768
+      latent_layers.1.ffn_latent.ffd.1.weight: 2359296
+      latent_layers.1.ffn_latent.ffd.1.bias: 3072
+      latent_layers.1.ffn_latent.ffd.4.weight: 2359296
+      latent_layers.1.ffn_latent.ffd.4.bias: 768
+      latent_layers.2.latent_attn.norm_embeddings.gamma: 768
+      latent_layers.2.latent_attn.norm_latents.gamma: 768
+      latent_layers.2.latent_attn.embeddings_to_KV.weight: 1179648
+      latent_layers.2.latent_attn.latents_to_Q.weight: 589824
+      latent_layers.2.latent_attn.latents_to_KV.weight: 1179648
+      latent_layers.2.latent_attn.query_norm.gamma: 64
+      latent_layers.2.latent_attn.key_norm.gamma: 64
+      latent_layers.2.latent_attn.projector_latents.weight: 589824
+      latent_layers.2.ffn_latent.ffd.0.weight: 768
+      latent_layers.2.ffn_latent.ffd.0.bias: 768
+      latent_layers.2.ffn_latent.ffd.1.weight: 2359296
+      latent_layers.2.ffn_latent.ffd.1.bias: 3072
+      latent_layers.2.ffn_latent.ffd.4.weight: 2359296
+      latent_layers.2.ffn_latent.ffd.4.bias: 768
+      latent_layers.3.latent_attn.norm_embeddings.gamma: 768
+      latent_layers.3.latent_attn.norm_latents.gamma: 768
+      latent_layers.3.latent_attn.embeddings_to_KV.weight: 1179648
+      latent_layers.3.latent_attn.latents_to_Q.weight: 589824
+      latent_layers.3.latent_attn.latents_to_KV.weight: 1179648
+      latent_layers.3.latent_attn.query_norm.gamma: 64
+      latent_layers.3.latent_attn.key_norm.gamma: 64
+      latent_layers.3.latent_attn.projector_latents.weight: 589824
+      latent_layers.3.ffn_latent.ffd.0.weight: 768
+      latent_layers.3.ffn_latent.ffd.0.bias: 768
+      latent_layers.3.ffn_latent.ffd.1.weight: 2359296
+      latent_layers.3.ffn_latent.ffd.1.bias: 3072
+      latent_layers.3.ffn_latent.ffd.4.weight: 2359296
+      latent_layers.3.ffn_latent.ffd.4.bias: 768
+      latent_layers.4.latent_attn.norm_embeddings.gamma: 768
+      latent_layers.4.latent_attn.norm_latents.gamma: 768
+      latent_layers.4.latent_attn.embeddings_to_KV.weight: 1179648
+      latent_layers.4.latent_attn.latents_to_Q.weight: 589824
+      latent_layers.4.latent_attn.latents_to_KV.weight: 1179648
+      latent_layers.4.latent_attn.query_norm.gamma: 64
+      latent_layers.4.latent_attn.key_norm.gamma: 64
+      latent_layers.4.latent_attn.projector_latents.weight: 589824
+      latent_layers.4.ffn_latent.ffd.0.weight: 768
+      latent_layers.4.ffn_latent.ffd.0.bias: 768
+      latent_layers.4.ffn_latent.ffd.1.weight: 2359296
+      latent_layers.4.ffn_latent.ffd.1.bias: 3072
+      latent_layers.4.ffn_latent.ffd.4.weight: 2359296
+      latent_layers.4.ffn_latent.ffd.4.bias: 768
+      latent_layers.5.latent_attn.norm_embeddings.gamma: 768
+      latent_layers.5.latent_attn.norm_latents.gamma: 768
+      latent_layers.5.latent_attn.embeddings_to_KV.weight: 1179648
+      latent_layers.5.latent_attn.latents_to_Q.weight: 589824
+      latent_layers.5.latent_attn.latents_to_KV.weight: 1179648
+      latent_layers.5.latent_attn.query_norm.gamma: 64
+      latent_layers.5.latent_attn.key_norm.gamma: 64
+      latent_layers.5.latent_attn.projector_latents.weight: 589824
+      latent_layers.5.ffn_latent.ffd.0.weight: 768
+      latent_layers.5.ffn_latent.ffd.0.bias: 768
+      latent_layers.5.ffn_latent.ffd.1.weight: 2359296
+      latent_layers.5.ffn_latent.ffd.1.bias: 3072
+      latent_layers.5.ffn_latent.ffd.4.weight: 2359296
+      latent_layers.5.ffn_latent.ffd.4.bias: 768
+      latent_layers.6.latent_attn.norm_embeddings.gamma: 768
+      latent_layers.6.latent_attn.norm_latents.gamma: 768
+      latent_layers.6.latent_attn.embeddings_to_KV.weight: 1179648
+      latent_layers.6.latent_attn.latents_to_Q.weight: 589824
+      latent_layers.6.latent_attn.latents_to_KV.weight: 1179648
+      latent_layers.6.latent_attn.query_norm.gamma: 64
+      latent_layers.6.latent_attn.key_norm.gamma: 64
+      latent_layers.6.latent_attn.projector_latents.weight: 589824
+      latent_layers.6.ffn_latent.ffd.0.weight: 768
+      latent_layers.6.ffn_latent.ffd.0.bias: 768
+      latent_layers.6.ffn_latent.ffd.1.weight: 2359296
+      latent_layers.6.ffn_latent.ffd.1.bias: 3072
+      latent_layers.6.ffn_latent.ffd.4.weight: 2359296
+      latent_layers.6.ffn_latent.ffd.4.bias: 768
+      latent_layers.7.latent_attn.norm_embeddings.gamma: 768
+      latent_layers.7.latent_attn.norm_latents.gamma: 768
+      latent_layers.7.latent_attn.embeddings_to_KV.weight: 1179648
+      latent_layers.7.latent_attn.latents_to_Q.weight: 589824
+      latent_layers.7.latent_attn.latents_to_KV.weight: 1179648
+      latent_layers.7.latent_attn.query_norm.gamma: 64
+      latent_layers.7.latent_attn.key_norm.gamma: 64
+      latent_layers.7.latent_attn.projector_latents.weight: 589824
+      latent_layers.7.ffn_latent.ffd.0.weight: 768
+      latent_layers.7.ffn_latent.ffd.0.bias: 768
+      latent_layers.7.ffn_latent.ffd.1.weight: 2359296
+      latent_layers.7.ffn_latent.ffd.1.bias: 3072
+      latent_layers.7.ffn_latent.ffd.4.weight: 2359296
+      latent_layers.7.ffn_latent.ffd.4.bias: 768
+      latent_layers.8.latent_attn.norm_embeddings.gamma: 768
+      latent_layers.8.latent_attn.norm_latents.gamma: 768
+      latent_layers.8.latent_attn.embeddings_to_KV.weight: 1179648
+      latent_layers.8.latent_attn.latents_to_Q.weight: 589824
+      latent_layers.8.latent_attn.latents_to_KV.weight: 1179648
+      latent_layers.8.latent_attn.query_norm.gamma: 64
+      latent_layers.8.latent_attn.key_norm.gamma: 64
+      latent_layers.8.latent_attn.projector_latents.weight: 589824
+      latent_layers.8.ffn_latent.ffd.0.weight: 768
+      latent_layers.8.ffn_latent.ffd.0.bias: 768
+      latent_layers.8.ffn_latent.ffd.1.weight: 2359296
+      latent_layers.8.ffn_latent.ffd.1.bias: 3072
+      latent_layers.8.ffn_latent.ffd.4.weight: 2359296
+      latent_layers.8.ffn_latent.ffd.4.bias: 768
+      latent_layers.9.latent_attn.norm_embeddings.gamma: 768
+      latent_layers.9.latent_attn.norm_latents.gamma: 768
+      latent_layers.9.latent_attn.embeddings_to_KV.weight: 1179648
+      latent_layers.9.latent_attn.latents_to_Q.weight: 589824
+      latent_layers.9.latent_attn.latents_to_KV.weight: 1179648
+      latent_layers.9.latent_attn.query_norm.gamma: 64
+      latent_layers.9.latent_attn.key_norm.gamma: 64
+      latent_layers.9.latent_attn.projector_latents.weight: 589824
+      latent_layers.9.ffn_latent.ffd.0.weight: 768
+      latent_layers.9.ffn_latent.ffd.0.bias: 768
+      latent_layers.9.ffn_latent.ffd.1.weight: 2359296
+      latent_layers.9.ffn_latent.ffd.1.bias: 3072
+      latent_layers.9.ffn_latent.ffd.4.weight: 2359296
+      latent_layers.9.ffn_latent.ffd.4.bias: 768
+      latent_layers.10.latent_attn.norm_embeddings.gamma: 768
+      latent_layers.10.latent_attn.norm_latents.gamma: 768
+      latent_layers.10.latent_attn.embeddings_to_KV.weight: 1179648
+      latent_layers.10.latent_attn.latents_to_Q.weight: 589824
+      latent_layers.10.latent_attn.latents_to_KV.weight: 1179648
+      latent_layers.10.latent_attn.query_norm.gamma: 64
+      latent_layers.10.latent_attn.key_norm.gamma: 64
+      latent_layers.10.latent_attn.projector_latents.weight: 589824
+      latent_layers.10.ffn_latent.ffd.0.weight: 768
+      latent_layers.10.ffn_latent.ffd.0.bias: 768
+      latent_layers.10.ffn_latent.ffd.1.weight: 2359296
+      latent_layers.10.ffn_latent.ffd.1.bias: 3072
+      latent_layers.10.ffn_latent.ffd.4.weight: 2359296
+      latent_layers.10.ffn_latent.ffd.4.bias: 768
+      latent_layers.11.latent_attn.norm_embeddings.gamma: 768
+      latent_layers.11.latent_attn.norm_latents.gamma: 768
+      latent_layers.11.latent_attn.embeddings_to_KV.weight: 1179648
+      latent_layers.11.latent_attn.latents_to_Q.weight: 589824
+      latent_layers.11.latent_attn.latents_to_KV.weight: 1179648
+      latent_layers.11.latent_attn.query_norm.gamma: 64
+      latent_layers.11.latent_attn.key_norm.gamma: 64
+      latent_layers.11.latent_attn.projector_latents.weight: 589824
+      latent_layers.11.ffn_latent.ffd.0.weight: 768
+      latent_layers.11.ffn_latent.ffd.0.bias: 768
+      latent_layers.11.ffn_latent.ffd.1.weight: 2359296
+      latent_layers.11.ffn_latent.ffd.1.bias: 3072
+      latent_layers.11.ffn_latent.ffd.4.weight: 2359296
+      latent_layers.11.ffn_latent.ffd.4.bias: 768
+      output_norm.gamma: 768
+    decoder:
+      positional_emb.emb.weight: 98304
+      embedding_ffn.ffd.0.weight: 768
+      embedding_ffn.ffd.0.bias: 768
+      embedding_ffn.ffd.1.weight: 2359296
+      embedding_ffn.ffd.1.bias: 3072
+      embedding_ffn.ffd.4.weight: 2359296
+      embedding_ffn.ffd.4.bias: 768
+      layers.0.latent_attn.norm_embeddings.gamma: 768
+      layers.0.latent_attn.norm_latents.gamma: 768
+      layers.0.latent_attn.embeddings_to_KV.weight: 1179648
+      layers.0.latent_attn.latents_to_Q.weight: 589824
+      layers.0.latent_attn.latents_to_KV.weight: 1179648
+      layers.0.latent_attn.query_norm.gamma: 64
+      layers.0.latent_attn.key_norm.gamma: 64
+      layers.0.latent_attn.projector_latents.weight: 589824
+      layers.0.attn_scale.scale_mlp.weight: 1
+      layers.0.attn_scale.scale_mlp.bias: 1
+      layers.0.ffn_latent.ffd.0.weight: 768
+      layers.0.ffn_latent.ffd.0.bias: 768
+      layers.0.ffn_latent.ffd.1.weight: 2359296
+      layers.0.ffn_latent.ffd.1.bias: 3072
+      layers.0.ffn_latent.ffd.4.weight: 2359296
+      layers.0.ffn_latent.ffd.4.bias: 768
+      layers.0.ffn_scale.scale_mlp.weight: 1
+      layers.0.ffn_scale.scale_mlp.bias: 1
+      layers.1.latent_attn.norm_embeddings.gamma: 768
+      layers.1.latent_attn.norm_latents.gamma: 768
+      layers.1.latent_attn.embeddings_to_KV.weight: 1179648
+      layers.1.latent_attn.latents_to_Q.weight: 589824
+      layers.1.latent_attn.latents_to_KV.weight: 1179648
+      layers.1.latent_attn.query_norm.gamma: 64
+      layers.1.latent_attn.key_norm.gamma: 64
+      layers.1.latent_attn.projector_latents.weight: 589824
+      layers.1.attn_scale.scale_mlp.weight: 1
+      layers.1.attn_scale.scale_mlp.bias: 1
+      layers.1.ffn_latent.ffd.0.weight: 768
+      layers.1.ffn_latent.ffd.0.bias: 768
+      layers.1.ffn_latent.ffd.1.weight: 2359296
+      layers.1.ffn_latent.ffd.1.bias: 3072
+      layers.1.ffn_latent.ffd.4.weight: 2359296
+      layers.1.ffn_latent.ffd.4.bias: 768
+      layers.1.ffn_scale.scale_mlp.weight: 1
+      layers.1.ffn_scale.scale_mlp.bias: 1
+      layers.2.latent_attn.norm_embeddings.gamma: 768
+      layers.2.latent_attn.norm_latents.gamma: 768
+      layers.2.latent_attn.embeddings_to_KV.weight: 1179648
+      layers.2.latent_attn.latents_to_Q.weight: 589824
+      layers.2.latent_attn.latents_to_KV.weight: 1179648
+      layers.2.latent_attn.query_norm.gamma: 64
+      layers.2.latent_attn.key_norm.gamma: 64
+      layers.2.latent_attn.projector_latents.weight: 589824
+      layers.2.attn_scale.scale_mlp.weight: 1
+      layers.2.attn_scale.scale_mlp.bias: 1
+      layers.2.ffn_latent.ffd.0.weight: 768
+      layers.2.ffn_latent.ffd.0.bias: 768
+      layers.2.ffn_latent.ffd.1.weight: 2359296
+      layers.2.ffn_latent.ffd.1.bias: 3072
+      layers.2.ffn_latent.ffd.4.weight: 2359296
+      layers.2.ffn_latent.ffd.4.bias: 768
+      layers.2.ffn_scale.scale_mlp.weight: 1
+      layers.2.ffn_scale.scale_mlp.bias: 1
+      layers.3.latent_attn.norm_embeddings.gamma: 768
+      layers.3.latent_attn.norm_latents.gamma: 768
+      layers.3.latent_attn.embeddings_to_KV.weight: 1179648
+      layers.3.latent_attn.latents_to_Q.weight: 589824
+      layers.3.latent_attn.latents_to_KV.weight: 1179648
+      layers.3.latent_attn.query_norm.gamma: 64
+      layers.3.latent_attn.key_norm.gamma: 64
+      layers.3.latent_attn.projector_latents.weight: 589824
+      layers.3.attn_scale.scale_mlp.weight: 1
+      layers.3.attn_scale.scale_mlp.bias: 1
+      layers.3.ffn_latent.ffd.0.weight: 768
+      layers.3.ffn_latent.ffd.0.bias: 768
+      layers.3.ffn_latent.ffd.1.weight: 2359296
+      layers.3.ffn_latent.ffd.1.bias: 3072
+      layers.3.ffn_latent.ffd.4.weight: 2359296
+      layers.3.ffn_latent.ffd.4.bias: 768
+      layers.3.ffn_scale.scale_mlp.weight: 1
+      layers.3.ffn_scale.scale_mlp.bias: 1
+      layers.4.latent_attn.norm_embeddings.gamma: 768
+      layers.4.latent_attn.norm_latents.gamma: 768
+      layers.4.latent_attn.embeddings_to_KV.weight: 1179648
+      layers.4.latent_attn.latents_to_Q.weight: 589824
+      layers.4.latent_attn.latents_to_KV.weight: 1179648
+      layers.4.latent_attn.query_norm.gamma: 64
+      layers.4.latent_attn.key_norm.gamma: 64
+      layers.4.latent_attn.projector_latents.weight: 589824
+      layers.4.attn_scale.scale_mlp.weight: 1
+      layers.4.attn_scale.scale_mlp.bias: 1
+      layers.4.ffn_latent.ffd.0.weight: 768
+      layers.4.ffn_latent.ffd.0.bias: 768
+      layers.4.ffn_latent.ffd.1.weight: 2359296
+      layers.4.ffn_latent.ffd.1.bias: 3072
+      layers.4.ffn_latent.ffd.4.weight: 2359296
+      layers.4.ffn_latent.ffd.4.bias: 768
+      layers.4.ffn_scale.scale_mlp.weight: 1
+      layers.4.ffn_scale.scale_mlp.bias: 1
+      layers.5.latent_attn.norm_embeddings.gamma: 768
+      layers.5.latent_attn.norm_latents.gamma: 768
+      layers.5.latent_attn.embeddings_to_KV.weight: 1179648
+      layers.5.latent_attn.latents_to_Q.weight: 589824
+      layers.5.latent_attn.latents_to_KV.weight: 1179648
+      layers.5.latent_attn.query_norm.gamma: 64
+      layers.5.latent_attn.key_norm.gamma: 64
+      layers.5.latent_attn.projector_latents.weight: 589824
+      layers.5.attn_scale.scale_mlp.weight: 1
+      layers.5.attn_scale.scale_mlp.bias: 1
+      layers.5.ffn_latent.ffd.0.weight: 768
+      layers.5.ffn_latent.ffd.0.bias: 768
+      layers.5.ffn_latent.ffd.1.weight: 2359296
+      layers.5.ffn_latent.ffd.1.bias: 3072
+      layers.5.ffn_latent.ffd.4.weight: 2359296
+      layers.5.ffn_latent.ffd.4.bias: 768
+      layers.5.ffn_scale.scale_mlp.weight: 1
+      layers.5.ffn_scale.scale_mlp.bias: 1
+      lm_head.weight: 22268928
+      scale_embedding.scale_mlp.weight: 1
+      scale_embedding.scale_mlp.bias: 1
+  logging:
+    log_freq: 10
+    eval_freq: 5000
+    save_freq: 100000
+  optimizer:
+    name: stableadam
+    learning_rate: 0.0002
+    warmup_lr: 1.0e-08
+    min_lr: 0.0001
+    weight_decay: 1.0e-05
+    eps: 1.0e-06
+    betas:
+    - 0.9
+    - 0.98
+    linear_warmup: 10
+    grad_clip_norm: 10.0
+encoder:
+  attention:
+    head_size: 64
+    num_heads: 12
+    probs_dropout: 0.0
+    qk_norm: true
+    implementation: flash_attention_2
+  embedding:
+    dim: 768
+    max_position_embeddings: 128
+    initializer_range: 0.02
+  hidden:
+    size: 768
+    dropout: 0.1
+    num_layers: 12
+    ff_mult: 4
+  latent:
+    dim: 768
+    num_latents: 16
+  normalization:
+    layer_eps: 1.0e-05
+  model:
+    text_encoder: bert-base-cased
+    text_encoder_freeze_params: true
+    mlm_probability: 0.3
+    bert_masking: true
+  tokens:
+    vocab_size: 28996
+  masking:
+    encodings_mlm_probability: 0.4
+    noise_sigma: 0.7
+    masking_weight: 0.5
+decoder:
+  attention:
+    head_size: 64
+    num_heads: 12
+    probs_dropout: 0.0
+    qk_norm: true
+    implementation: flash_attention_2
+  embedding:
+    dim: 768
+    max_position_embeddings: 128
+    initializer_range: 0.02
+  hidden:
+    size: 768
+    dropout: 0.1
+    num_layers: 6
+    ff_mult: 4
+  latent:
+    dim: 768
+    num_latents: 16
+  normalization:
+    layer_eps: 1.0e-05
+  model:
+    text_encoder: bert-base-cased
+    text_encoder_freeze_params: true
+    mlm_probabilities:
+    - 1.0
+    bert_masking: true
+  tokens:
+    vocab_size: 28996
+    mask_token_id: 103
+  finetuning:
+    max_std: 0.5
+dataset:
+  name: wikipedia
+  dataset_path: /home/jovyan/vmeshchaninov/LatentDiffusion/data/wikipedia
+  max_sequence_len: 128
+  swap_cfg_coef: 0.0
+  metrics:
+  - mauve
+  - ppl
+  - div
+tokenizer:
+  add_special_tokens: true
+  padding: true
+  truncation: true
+  return_tensors: pt
+  return_attention_mask: true
+  return_token_type_ids: false
+diffusion:
+  model:
+    checkpoints_prefix: diffusion
+    num_workers: 30
+    load_checkpoint: null
+  training:
+    training_iters: 100000
+    batch_size: 1024
+    batch_size_per_gpu: 1024
+  generation:
+    num_gen_texts: 10000
+    texts_dir_path: generated_texts
+    num_texts_from_metric: 1000
+  diffusion:
+    T: 1.0
+    eps: 1.0e-05
+    use_self_cond: true
+    t_min: 0.05
+    is_conditional: false
+  ema:
+    decay: 0.9999
+  dynamic:
+    'N': 200
+    scheduler: tanh
+    d: 5
+    solver: euler
+    ode_sampling: false
+  params:
+    score_estimator: 0
+  all_params: dict()
+  logging:
+    log_freq: 10
+    eval_freq: 20000
+    save_freq: 200000
+  architecture:
+    unconditional_encoder:
+      hidden_size: 768
+      intermediate_size: 3072
+      num_hidden_layers: 12
+      num_attention_heads: 12
+      attention_head_size: 64
+      attention_probs_dropout_prob: 0.0
+      layer_norm_eps: 1.0e-05
+      rope_theta: 10000.0
+      max_position_embeddings: 512
+      embedding_dim: 768
+    time_embedding:
+      max_period: 10
+    conditional_encoder:
+      hidden_size: 768
+      num_hidden_layers: 12
+      num_attention_heads: 12
+      max_position_embeddings: 512
+  optimizer:
+    name: adamw
+    learning_rate: 0.0002
+    warmup_lr: 1.0e-08
+    min_lr: 0.0002
+    weight_decay: 1.0e-05
+    eps: 1.0e-06
+    betas:
+    - 0.9
+    - 0.98
+    linear_warmup: 1000
+    grad_clip_norm: 1.0
+project:
+  path: ${oc.env:PROJECT_ROOT}
+  seed: 0
+  output_dir: ${project.path}/outputs/
+  checkpoint_dir: ${project.path}/checkpoints/
+  name: test
+ddp:
+  enabled: true
+  local_rank: 0
+  global_rank: 0
+  world_size: ${oc.env:WORLD_SIZE,1}
+model:
+  text_encoder: bert-base-cased
+training: autoencoder

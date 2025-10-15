@@ -1,0 +1,57 @@
+defaults:
+  - autoencoder: default
+  - autoencoder/optimizer: stableadam
+  - encoder: default
+  - decoder: default
+  - dataset: wikipedia-emnlp
+  - tokenizer: default
+  - diffusion: default
+  - diffusion/optimizer: adamw
+
+project:
+  path: ${oc.env:PROJECT_ROOT}
+  seed: 0
+  output_dir: "${project.path}/outputs/"
+  checkpoint_dir: "/mnt/virtual_ai0001071-01239_SR006-nfs1/afedorov/projects/latentdiffusion/checkpoints_one_latent_longrun/"
+  run_name: 'temp_name'
+  name: "latent-diffusion-article-autoencoder-v2.1-longrun" #"hierarchical-diffusion-v1.4"
+
+
+#✅ DDP (Distributed Data Parallel) settings
+ddp:
+  enabled: false
+  local_rank: ${oc.env:LOCAL_RANK,0}  
+  global_rank: ${oc.env:RANK,0}
+  world_size: ${oc.env:WORLD_SIZE,1}
+
+s3:
+  bucket: "cosmos-latent-diffusion"
+  region: "eu-north-1"
+
+training: "autoencoder"
+
+suffix: "v2.0"
+
+# my cringe
+loader:
+  batch_size: 128
+  num_workers: 4
+  pin_memory: true
+  streaming: false
+  persistent_workers: true
+  eval_batch_size: 256
+
+model: 
+  length: 128
+  gradient_accumulation_steps: 2
+
+training_setup:
+  training_iters: 200000
+
+data:
+  train: openwebtext-train
+  valid: openwebtext-valid
+  tokenizer_name_or_path: gpt2
+  cache_dir: /mnt/virtual_ai0001071-01239_SR006-nfs2/afedorov/projects/LatentDiffusion/cache
+  wrap: False
+  streaming: False

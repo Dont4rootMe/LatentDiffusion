@@ -1,0 +1,6 @@
+name: "rocstories"
+dataset_path: "${project.path}/data/${.name}"
+max_sequence_len: 80
+swap_cfg_coef: 0.
+
+metrics: [mauve, ppl, div]
