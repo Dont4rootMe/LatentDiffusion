@@ -7,14 +7,13 @@ from typing import Dict, Tuple, Union, Any
 import numpy as np
 import torch
 import torch.distributed as dist
-# Use JSON logger as drop-in replacement for wandb
-from utils import wandb_json_logger as wandb
 from omegaconf import DictConfig
 from timm.scheduler.cosine_lr import CosineLRScheduler
 from torch.cuda.amp import GradScaler
 from torch.nn.functional import cross_entropy
 from torch.optim.adamw import AdamW
 from torch.utils.data import DataLoader
+from torch.utils.tensorboard import SummaryWriter
 from tqdm import trange, tqdm
 from transformers import AutoTokenizer
 from omegaconf import OmegaConf
@@ -24,8 +23,6 @@ from architecture.encoder import Encoder
 from architecture.decoder import Decoder
 
 from utils import DatasetDDP, BatchEncoding
-from utils.logging_utils import config_to_json_logger as config_to_wandb, log_batch_of_tensors_to_wandb
-from utils import init_json_logger 
 
 from diffusion_utils.corruption import apply_corruption, prepare_corruption
 
@@ -76,7 +73,9 @@ class EncoderTrainer:
         self.accelerator = Accelerator(gradient_accumulation_steps=cfg.model.gradient_accumulation_steps)
 
         # Initialize tokenizer and set vocab configs
-        self.tokenizer = AutoTokenizer.from_pretrained(self.cfg.autoencoder.model.text_encoder)
+        # self.tokenizer = AutoTokenizer.from_pretrained(self.cfg.autoencoder.model.text_encoder)
+        from dataloader import get_tokenizer
+        self.tokenizer = get_tokenizer(self.cfg)
         self.vocab_size = self.tokenizer.vocab_size
 
         self.device = self.accelerator.device
@@ -106,10 +105,9 @@ class EncoderTrainer:
         # self._setup_ddp()
 
         if self.cfg.training == "autoencoder":
-            # Initialize JSON logger only on main process
+            # Initialize TensorBoard logger only on main process
             if self.accelerator.is_main_process:
-                init_json_logger(self.cfg, experiment_name=self.cfg.project.run_name)
-                config_to_wandb(self.cfg)
+                self._setup_tensorboard()
             
             if is_loaded and dist.is_initialized() and self.cfg.ddp.enabled:
                 self.validate()
@@ -201,6 +199,24 @@ class EncoderTrainer:
         
     def _setup_grad_scaler(self) -> None:
         self.grad_scaler = GradScaler()
+    
+    def _setup_tensorboard(self) -> None:
+        """Setup TensorBoard logging."""
+        # Get TensorBoard log directory from config
+        tensorboard_log_dir = self.cfg.tensorboard.log_dir
+        
+        # Create run-specific directory using run_name from config
+        run_name = self.cfg.run_name
+        tensorboard_run_dir = os.path.join(tensorboard_log_dir, run_name)
+        
+        # Ensure directory exists
+        os.makedirs(tensorboard_run_dir, exist_ok=True)
+        
+        # Initialize TensorBoard writer
+        self.tensorboard_writer = SummaryWriter(log_dir=tensorboard_run_dir)
+        
+        print(f"📊 TensorBoard logging initialized. Logs will be saved to: {tensorboard_run_dir}")
+        print(f"   To view logs, run: tensorboard --logdir {tensorboard_log_dir}")
 
     def _setup_train_data_generator(self) -> None:
         
@@ -358,6 +374,7 @@ class EncoderTrainer:
             os.makedirs(prefix_folder, exist_ok=True)
 
             save_path = os.path.join(prefix_folder, f"{self.step}.pth")
+            # save_path = os.path.join(prefix_folder, f"last.pth")
 
             # Optional: avoid the (sometimes slow) zipfile serializer on NFS/SSHFS
             torch.save(state_dict, save_path, _use_new_zipfile_serialization=False)
@@ -394,14 +411,30 @@ class EncoderTrainer:
 
     def log_metric(self, metric_name: str, loader_name: str, value: Union[float, torch.Tensor, Any]):
         """
-        Legacy method for logging individual metrics. 
+        Method for logging individual metrics to TensorBoard.
         Prefer using log_data() for batched logging which is more efficient.
         """
         # Only log on main process when using accelerator
-        if self.accelerator.is_main_process:
-            wandb.log({f'{metric_name}/{loader_name}': value}, step=self.step)
+        if self.accelerator.is_main_process and hasattr(self, 'tensorboard_writer'):
+            metric_key = f'{metric_name}/{loader_name}'
+            
+            try:
+                # Convert various types to float for TensorBoard
+                if isinstance(value, torch.Tensor):
+                    if value.numel() == 1:  # Single element tensor
+                        value = value.item()
+                    else:
+                        value = value.mean().item()  # Multi-element tensor
+                elif isinstance(value, (np.ndarray, np.number)):
+                    value = float(value)
+                elif not isinstance(value, (int, float)):
+                    value = float(value)
+                
+                self.tensorboard_writer.add_scalar(metric_key, value, self.step)
+            except Exception as e:
+                print(f"Warning: Failed to log to TensorBoard: {e}")
 
-    def optimizer_step(self, loss: torch.Tensor): 
+    def optimizer_step(self, loss: torch.Tensor):
         self.optimizer.zero_grad()
         
         # Use Accelerator's backward method for proper gradient scaling and distributed handling
@@ -454,9 +487,24 @@ class EncoderTrainer:
             for k, v in stat_dict.items():
                 all_metrics[f"statistics/{k}"] = v
         
-        # Log all metrics at once only on main process
-        if self.accelerator.is_main_process:
-            wandb.log(all_metrics, step=self.step)
+        # Log all metrics to TensorBoard only on main process
+        if self.accelerator.is_main_process and hasattr(self, 'tensorboard_writer'):
+            try:
+                for metric_name, metric_value in all_metrics.items():
+                    # Convert various types to float for TensorBoard
+                    if isinstance(metric_value, torch.Tensor):
+                        if metric_value.numel() == 1:  # Single element tensor
+                            metric_value = metric_value.item()
+                        else:
+                            metric_value = metric_value.mean().item()  # Multi-element tensor
+                    elif isinstance(metric_value, (np.ndarray, np.number)):
+                        metric_value = float(metric_value)
+                    elif not isinstance(metric_value, (int, float)):
+                        metric_value = float(metric_value)
+                    
+                    self.tensorboard_writer.add_scalar(metric_name, metric_value, self.step)
+            except Exception as e:
+                print(f"Warning: Failed to log to TensorBoard: {e}")
     
     def train(self) -> None:
         try:
@@ -519,7 +567,11 @@ class EncoderTrainer:
 
                 if self.step % self.cfg.autoencoder.logging.log_freq == 0:
                     if self.accelerator.is_main_process:
-                        self.log_data(total_loss, loss_dict, stat_dict, is_train=True)   
+                        self.log_data(total_loss, loss_dict, stat_dict, is_train=True)
+                        
+                        # Log model histograms less frequently (every 10x log_freq)
+                        if self.step % (self.cfg.autoencoder.logging.log_freq * 10) == 0:
+                            self.log_model_histograms()   
                 
                 self.train_range.set_description(f"total_loss: {total_loss.item():0.3f}")
                 
@@ -541,8 +593,11 @@ class EncoderTrainer:
         # print(f'\n\nsaved final checkpoint at step {self.step}\n\n')
 
         # Finish logging on main process
-        # if self.accelerator.is_main_process:
-        #     wandb.finish()   
+        if self.accelerator.is_main_process:
+            # Close TensorBoard writer
+            if hasattr(self, 'tensorboard_writer'):
+                self.tensorboard_writer.close()
+                print("📊 TensorBoard logging finished.")   
 
     @torch.no_grad()
     def validate(self) -> None:
@@ -800,12 +855,6 @@ class EncoderTrainer:
             # batch = batch.to(self.device)
             
             with torch.autocast(device_type='cuda', dtype=torch.bfloat16), torch.no_grad():
-                # print('\n\n\n\n')
-                # print(f'batch["input_ids"].device: {batch["input_ids"].device}')
-                # print(f'batch["attention_mask"].device: {batch["attention_mask"].device}')
-                # print(f'self.device: {self.device}')
-                # print(f'self.encoder.text_encoder.device: {self.encoder.text_encoder.device}')
-                # print('\n\n\n\n')
                 try:
                     bert_hidden_state = self.accelerator.unwrap_model(self.encoder).text_encoder(
                         input_ids=batch["input_ids"],
@@ -841,6 +890,30 @@ class EncoderTrainer:
     
     def denormalize_encodings(self, encodings):
         return encodings * self.encodings_std + self.encodings_mean
+    
+    def log_model_histograms(self):
+        """Log model parameter histograms to TensorBoard."""
+        if self.accelerator.is_main_process and hasattr(self, 'tensorboard_writer'):
+            try:
+                # Log encoder parameters
+                for name, param in self.encoder.named_parameters():
+                    if param.requires_grad and param.grad is not None:
+                        self.tensorboard_writer.add_histogram(f'encoder/{name}', param.data, self.step)
+                        self.tensorboard_writer.add_histogram(f'encoder/{name}.grad', param.grad.data, self.step)
+                
+                # Log decoder parameters
+                for name, param in self.decoder.named_parameters():
+                    if param.requires_grad and param.grad is not None:
+                        self.tensorboard_writer.add_histogram(f'decoder/{name}', param.data, self.step)
+                        self.tensorboard_writer.add_histogram(f'decoder/{name}.grad', param.grad.data, self.step)
+            except Exception as e:
+                print(f"Warning: Failed to log histograms to TensorBoard: {e}")
+
+    def cleanup_logging(self):
+        """Clean up logging resources."""
+        if self.accelerator.is_main_process and hasattr(self, 'tensorboard_writer'):
+            self.tensorboard_writer.close()
+            print("📊 TensorBoard writer closed.")
          
         
         

@@ -434,8 +434,8 @@ def get_dataset(
                          return_attention_mask=False,
                          return_token_type_ids=False)
       tokens = {'input_ids':
-                [t + [BOS] for t in tokens['input_ids']]}
-      # Still missing BOS, but will be added in group_texts
+                [t for t in tokens['input_ids']]}
+      # Still missing BOS and EOS, but will be added in group_texts
     else:
       tokens = tokenizer(text,
                          max_length=block_size,
@@ -497,12 +497,14 @@ def get_dataset(
 def get_tokenizer(config):
   if config.data.tokenizer_name_or_path == 'text8':
     tokenizer = Text8Tokenizer()
-  elif config.data.tokenizer_name_or_path == 'bert-base-uncased':
+  elif config.data.tokenizer_name_or_path == 'bert-base-uncased' or config.data.tokenizer_name_or_path == 'bert-base-cased':
     tokenizer = transformers.BertTokenizer.\
-      from_pretrained('bert-base-uncased')
+      from_pretrained(config.data.tokenizer_name_or_path)
   else:
     tokenizer = transformers.AutoTokenizer.from_pretrained(
       config.data.tokenizer_name_or_path)
+    
+  print(f"\n\n\nTokenizer: {config.data.tokenizer_name_or_path} - {tokenizer}\n\n\n")
 
   if (isinstance(tokenizer, transformers.GPT2TokenizerFast)
       or isinstance(tokenizer, transformers.GPT2Tokenizer)):

@@ -52,6 +52,7 @@ class Encoder(nn.Module):
         self.num_hidden_layers = cfg.hidden.num_layers
         
         # token embeddings
+        print(f"\n\n\nLoading text encoder: {cfg.model.text_encoder}\n\n\n")
         self.text_encoder = AutoModel.from_pretrained(
             cfg.model.text_encoder,
             add_pooling_layer=False,

@@ -8,11 +8,16 @@ defaults:
   - diffusion: default
   - diffusion/optimizer: adamw
 
+tensorboard:
+  log_dir: "/mnt/virtual_ai0001071-01239_SR006-nfs1/afedorov/projects/latentdiffusion/tensorboard_logs/"
+
+run_name: 'result_verification'
+
 project:
-  path: ${oc.env:PROJECT_ROOT}
+  path: /mnt/virtual_ai0001071-01239_SR006-nfs1/afedorov/projects/latentdiffusion
   seed: 0
   output_dir: "${project.path}/outputs/"
-  checkpoint_dir: "/mnt/virtual_ai0001071-01239_SR006-nfs1/afedorov/projects/latentdiffusion/checkpoints_one_latent_longrun/"
+  checkpoint_dir: "/mnt/virtual_ai0001071-01239_SR006-nfs1/afedorov/projects/latentdiffusion/recheck_on_one_latent_vae/"
   run_name: 'temp_name'
   name: "latent-diffusion-article-autoencoder-v2.1-longrun" #"hierarchical-diffusion-v1.4"
 
@@ -51,7 +56,7 @@ training_setup:
 data:
   train: openwebtext-train
   valid: openwebtext-valid
-  tokenizer_name_or_path: gpt2
-  cache_dir: /mnt/virtual_ai0001071-01239_SR006-nfs2/afedorov/projects/LatentDiffusion/cache
+  tokenizer_name_or_path: bert-base-cased
+  cache_dir: /mnt/virtual_ai0001071-01239_SR006-nfs1/afedorov/projects/cache_bert-base-cased
   wrap: False
   streaming: False

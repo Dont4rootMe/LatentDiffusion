@@ -18,7 +18,7 @@ hidden:
 
 latent:
   dim: 768
-  num_latents: 128
+  num_latents: 1
 
 normalization:
   layer_eps: 1.0e-5

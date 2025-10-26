@@ -7,7 +7,7 @@ attention:
 
 embedding:
   dim: 768
-  max_position_embeddings: 128
+  max_position_embeddings: 129
   initializer_range: 0.02
 
 hidden:
@@ -18,7 +18,7 @@ hidden:
 
 latent:
   dim: 768
-  num_latents: 128
+  num_latents: 1
 
 normalization:
   layer_eps: 1.0e-5

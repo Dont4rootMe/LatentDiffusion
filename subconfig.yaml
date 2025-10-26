@@ -10,7 +10,7 @@ latent_encoder:
     
   embedding:
     dim: 768
-    max_position_embeddings: 128
+    max_position_embeddings: 129
     initializer_range: 0.02
 
   hidden:
@@ -21,13 +21,13 @@ latent_encoder:
 
   latent:
     dim: 768
-    num_latents: 128
+    num_latents: 1
 
   normalization:
     layer_eps: 1.0e-05
 
   model:
-    text_encoder: bert-base-cased
+    text_encoder: gpt2
     text_encoder_freeze_params: true
     mlm_probability: 0.3
     bert_masking: true
